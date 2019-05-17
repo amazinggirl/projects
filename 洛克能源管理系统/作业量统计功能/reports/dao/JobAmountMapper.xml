@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qhit.reports.dao.IJobAmountDao">
+
+    <resultMap id="JobAmountMap" type="com.qhit.reports.pojo.JobAmount">
+        <result property="names" column="names" javaType="java.lang.String"></result>
+        <result property="months" column="months" javaType="java.lang.String"></result>
+        <result property="amounts" column="amounts" javaType="java.lang.String"></result>
+    </resultMap>
+    <select id="flowAmount" resultMap="JobAmountMap" parameterType="com.qhit.reports.pojo.JobAmount">
+	SELECT fa.compid,bf.flowname AS NAMES,fa.amounts
+		FROM base_flow bf
+		JOIN(
+		SELECT fa.compid,fa.flowid,fa.flowname,CONCAT(fa.a,',',fa.b,',',fa.c,',',fa.d,',',fa.e,',',fa.f,',',fa.g,',',fa.h,',',fa.i,',',fa.j,',',fa.k,',',fa.l) AS amounts
+		FROM(
+		SELECT bf.compid,bf.flowid,bf.flowname,
+			SUM(CASE WHEN MONTH(pr.completetime)=1 THEN IFNULL(pr.capacity,0) ELSE 0 END) 'a',
+			SUM(CASE WHEN MONTH(pr.completetime)=2 THEN pr.capacity ELSE 0 END) 'b',
+			SUM(CASE WHEN MONTH(pr.completetime)=3 THEN pr.capacity ELSE 0 END) 'c',
+			SUM(CASE WHEN MONTH(pr.completetime)=4 THEN pr.capacity ELSE 0 END) 'd',
+			SUM(CASE WHEN MONTH(pr.completetime)=5 THEN pr.capacity ELSE 0 END) 'e',
+			SUM(CASE WHEN MONTH(pr.completetime)=6 THEN pr.capacity ELSE 0 END) 'f',
+			SUM(CASE WHEN MONTH(pr.completetime)=7 THEN pr.capacity ELSE 0 END) 'g',
+			SUM(CASE WHEN MONTH(pr.completetime)=8 THEN pr.capacity ELSE 0 END) 'h',
+			SUM(CASE WHEN MONTH(pr.completetime)=9 THEN pr.capacity ELSE 0 END) 'i',
+			SUM(CASE WHEN MONTH(pr.completetime)=10 THEN pr.capacity ELSE 0 END) 'j',
+			SUM(CASE WHEN MONTH(pr.completetime)=11 THEN pr.capacity ELSE 0 END) 'k',
+			SUM(CASE WHEN MONTH(pr.completetime)=12 THEN pr.capacity ELSE 0 END) 'l'
+		FROM produce_report pr
+				RIGHT OUTER JOIN base_flow bf ON pr.flowid=bf.flowid AND YEAR(pr.completetime)=#{year}
+			GROUP BY bf.flowid) AS fa) AS fa ON bf.flowid=fa.flowid
+		WHERE bf.compid=#{compid}
+    </select>
+    <select id="devtypeAmount" resultMap="JobAmountMap" parameterType="com.qhit.reports.pojo.JobAmount">
+        SELECT fa.compid,bf.flowname AS NAMES,fa.amounts
+        FROM base_flow bf
+        JOIN(
+        SELECT fa.compid,fa.flowid,fa.flowname,CONCAT(fa.a,',',fa.b,',',fa.c,',',fa.d,',',fa.e,',',fa.f,',',fa.g,',',fa.h,',',fa.i,',',fa.j,',',fa.k,',',fa.l) AS amounts
+        FROM(
+        SELECT bf.compid,bf.flowid,bf.flowname,
+        SUM(CASE WHEN MONTH(pr.completetime)=1 THEN IFNULL(pr.capacity,0) ELSE 0 END) 'a',
+        SUM(CASE WHEN MONTH(pr.completetime)=2 THEN pr.capacity ELSE 0 END) 'b',
+        SUM(CASE WHEN MONTH(pr.completetime)=3 THEN pr.capacity ELSE 0 END) 'c',
+        SUM(CASE WHEN MONTH(pr.completetime)=4 THEN pr.capacity ELSE 0 END) 'd',
+        SUM(CASE WHEN MONTH(pr.completetime)=5 THEN pr.capacity ELSE 0 END) 'e',
+        SUM(CASE WHEN MONTH(pr.completetime)=6 THEN pr.capacity ELSE 0 END) 'f',
+        SUM(CASE WHEN MONTH(pr.completetime)=7 THEN pr.capacity ELSE 0 END) 'g',
+        SUM(CASE WHEN MONTH(pr.completetime)=8 THEN pr.capacity ELSE 0 END) 'h',
+        SUM(CASE WHEN MONTH(pr.completetime)=9 THEN pr.capacity ELSE 0 END) 'i',
+        SUM(CASE WHEN MONTH(pr.completetime)=10 THEN pr.capacity ELSE 0 END) 'j',
+        SUM(CASE WHEN MONTH(pr.completetime)=11 THEN pr.capacity ELSE 0 END) 'k',
+        SUM(CASE WHEN MONTH(pr.completetime)=12 THEN pr.capacity ELSE 0 END) 'l'
+        FROM produce_report pr
+        RIGHT OUTER JOIN base_flow bf ON pr.flowid=bf.flowid AND YEAR(pr.completetime)=#{year}
+        GROUP BY bf.flowid) AS fa) AS fa ON bf.flowid=fa.flowid
+        WHERE bf.compid=#{compid}
+    </select>
+    <select id="devAmount" resultMap="JobAmountMap" parameterType="com.qhit.reports.pojo.JobAmount">
+        SELECT fa.compid,bf.flowname AS NAMES,fa.amounts
+        FROM base_flow bf
+        JOIN(
+        SELECT fa.compid,fa.flowid,fa.flowname,CONCAT(fa.a,',',fa.b,',',fa.c,',',fa.d,',',fa.e,',',fa.f,',',fa.g,',',fa.h,',',fa.i,',',fa.j,',',fa.k,',',fa.l) AS amounts
+        FROM(
+        SELECT bf.compid,bf.flowid,bf.flowname,
+        SUM(CASE WHEN MONTH(pr.completetime)=1 THEN IFNULL(pr.capacity,0) ELSE 0 END) 'a',
+        SUM(CASE WHEN MONTH(pr.completetime)=2 THEN pr.capacity ELSE 0 END) 'b',
+        SUM(CASE WHEN MONTH(pr.completetime)=3 THEN pr.capacity ELSE 0 END) 'c',
+        SUM(CASE WHEN MONTH(pr.completetime)=4 THEN pr.capacity ELSE 0 END) 'd',
+        SUM(CASE WHEN MONTH(pr.completetime)=5 THEN pr.capacity ELSE 0 END) 'e',
+        SUM(CASE WHEN MONTH(pr.completetime)=6 THEN pr.capacity ELSE 0 END) 'f',
+        SUM(CASE WHEN MONTH(pr.completetime)=7 THEN pr.capacity ELSE 0 END) 'g',
+        SUM(CASE WHEN MONTH(pr.completetime)=8 THEN pr.capacity ELSE 0 END) 'h',
+        SUM(CASE WHEN MONTH(pr.completetime)=9 THEN pr.capacity ELSE 0 END) 'i',
+        SUM(CASE WHEN MONTH(pr.completetime)=10 THEN pr.capacity ELSE 0 END) 'j',
+        SUM(CASE WHEN MONTH(pr.completetime)=11 THEN pr.capacity ELSE 0 END) 'k',
+        SUM(CASE WHEN MONTH(pr.completetime)=12 THEN pr.capacity ELSE 0 END) 'l'
+        FROM produce_report pr
+        RIGHT OUTER JOIN base_flow bf ON pr.flowid=bf.flowid AND YEAR(pr.completetime)=#{year}
+        GROUP BY bf.flowid) AS fa) AS fa ON bf.flowid=fa.flowid
+        WHERE bf.compid=#{compid}
+    </select>
+</mapper>
