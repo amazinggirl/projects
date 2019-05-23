@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.qhit.buseActive.dao.IBuseActiveDao"> 
+	<!-- 自定义结果集 --> 
+	<resultMap id="BaseResultMap" type="com.qhit.buseActive.pojo.BuseActive"> 
+		<id property="baid" column="baid" javaType="java.lang.Integer"></id> 
+		<result property="aid" column="aid" javaType="java.lang.Integer"></result> 
+		<result property="acid" column="acid" javaType="java.lang.Integer"></result> 
+	</resultMap> 
+
+	<!-- 在各种标签中，id属性必须与接口中的方法名一样，id的值必须是唯一的，parameterType指查询时使用的参数类型， 
+	resultType属性指明查询返回的结果集类型    --> 
+ 
+	<sql id="Base_Column_List" > 
+		baid,aid,acid 
+	</sql> 
+	<select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Integer" > 
+		select 
+		<include refid="Base_Column_List" /> 
+		from buse_active 
+		where baid = #{baid} 
+	</select>
+	<select id="findByaId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+		select
+		<include refid="Base_Column_List" />
+		from buse_active
+		where aid = #{aid}
+	</select>
+	<delete id="delete" parameterType="java.lang.Integer" > 
+		delete from buse_active 
+		where baid = #{baid}
+	</delete>
+	<delete id="deleteByaid" parameterType="java.lang.Integer" >
+		delete from buse_active
+		where aid = #{aid}
+	</delete>
+
+	<select id="dainzan" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		SELECT COUNT(*)baid FROM buse_active ba
+		WHERE ba.acid=#{arg0} AND ba.aid=#{arg1}
+	</select>
+	<select id="count" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		SELECT COUNT(*)baid FROM buse_active ba
+		WHERE ba.acid=#{acid}
+	</select>
+
+	<insert id="insert" parameterType="com.qhit.buseActive.pojo.BuseActive" > 
+		insert into buse_active(aid,acid) 
+		values (#{aid},#{acid}) 
+	</insert> 
+	<update id="updateSelective" parameterType="com.qhit.buseActive.pojo.BuseActive" > 
+		update buse_active 
+		<set > 
+			<if test="aid != null and aid!='' " > 
+				aid = #{aid}, 
+			</if> 
+			<if test="acid != null and acid!='' " > 
+				acid = #{acid}, 
+			</if> 
+		</set> 
+		where baid = #{baid} 
+	</update> 
+	<update id="update" parameterType="com.qhit.buseActive.pojo.BuseActive" > 
+		update buse_active 
+		set  aid = #{aid}, acid = #{acid} 
+		where baid = #{baid} 
+	</update> 
+	<select id="findAll" resultMap="BaseResultMap" > 
+		select 
+		<include refid="Base_Column_List" /> 
+		from buse_active 
+	</select> 
+	<select id="findByAid" resultMap="BaseResultMap" parameterType="java.lang.Integer" > 
+		select 
+		<include refid="Base_Column_List" /> 
+		from buse_active 
+		where aid = #{aid} 
+	</select> 
+	<select id="findByAcid" resultMap="BaseResultMap" parameterType="java.lang.Integer" > 
+		select 
+		<include refid="Base_Column_List" /> 
+		from buse_active 
+		where acid = #{acid} 
+	</select> 
+	<delete id="deleteBatch" parameterType="java.util.Arrays"> 
+		delete from buse_active where baid in 
+		<foreach collection="array" item="id" open="(" close=")" separator=","> 
+			#{id} 
+		</foreach> 
+	</delete> 
+	<select id="search" parameterType="com.qhit.buseActive.pojo.BuseActive" resultMap="BaseResultMap"> 
+		select * from  buse_active 
+		<where > 
+			<if test="aid != null and aid!='' " > 
+				 and aid = #{aid} 
+			</if> 
+			<if test="acid != null and acid!='' " > 
+				 and acid = #{acid} 
+			</if> 
+		</where> 
+	</select> 
+</mapper> 
